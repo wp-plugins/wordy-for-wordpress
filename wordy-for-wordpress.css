@@ -1,0 +1,94 @@
+
+.wfw-messages {
+  border: 1px solid #CCCCCC;
+  margin-bottom: 18px;
+  max-height: 400px;
+  overflow-y: scroll;
+  padding: 10px 20px;
+}
+
+.wfw-client .wfw-quote {
+  margin-left: 74px;
+}
+
+.wfw-client {
+  margin-bottom: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.wfw-editor {
+  margin-bottom: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.wfw-quote p,
+#wfw-update-conversation-text {
+  background: none repeat scroll 0 0 #F5F5F5;
+  border: 1px solid #CCCCCC;
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: 0 1px 3px #DEDEDE;
+  display: block;
+  font: 12px/16px "Helvetica Neue",Arial,Helvetica,Geneva,sans-serif;
+  padding: 10px;
+}
+
+#wfw-update-conversation-text {
+  margin: 0 0 10px;;
+  width: 100%;
+  background-color: #fff;
+}
+
+.wfw-client .wfw-quote .wfw-timestamp {
+  float: left;
+}
+
+.wfw-editor .wfw-quote .wfw-timestamp {
+  float: right;
+}
+
+.wfw-quote .wfw-name {
+  color: #999999;
+  display: inline-block;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.wfw-quote .wfw-timestamp {
+  color: #999999;
+  display: block;
+  font-size: 11px;
+  margin-top: 14px;
+  overflow: hidden;
+}
+
+.wfw-editor .wfw-quote {
+  margin-right: 74px;
+}
+
+.post-php #wfw-summary-meta-box .inside {
+  margin: 0;
+  padding: 0;
+}
+
+.wfw-placeholder-alternative {
+  display: none;
+}
+
+div.wfw-notice {
+  background: #ffffe0 url(images/logo.png) no-repeat 0 -34px;
+  padding-left: 36px;
+}
+
+div.wfw-notice a {
+  font-weight: bold;
+}
+
+#wfw-icon {
+  background: transparent url(images/logo.png) no-repeat 0 0;
+}
+
+#load-wordy-edit {
+  margin-left: 20px;
+}
