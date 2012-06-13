@@ -2,16 +2,16 @@
 Contributors: wordycom
 Tags: copy-editing, copyediting, wordpress, copy-editors, publishing, wordy, grammar, spelling, punctuation, structure, post-publish editing, freelance editors, proofreading, proof reading, real-time, real time
 Requires at least: 3.3.1
-Tested up to: 3.3.1
+Tested up to: 3.4
 Stable tag: 0.1
 
 Real-time, human, copy-editing and proofreading for everything you post.
 
 == Description ==
 
-Wordy for WordPress lets you seamlessly send your blog posts to Wordy.com for real-time, human, proofreading and copy-editing – all without leaving WordPress:
+Wordy for WordPress lets you seamlessly send your blog posts to [Wordy.com](https://wordy.com/) for real-time, human, proofreading and copy-editing – all without leaving WordPress:
 
-* Best web turnaround time
+* Best of web turnaround time
 * Expert editors in all major time zones
 * Choose between English, German and Danish editors
 
@@ -45,6 +45,12 @@ Enter your brief to the editor and send your post to Wordy from your post page.
 
 = How do I contact my editor? =
 You can send and receive messages from your editor in real-time from your post page.
+
+== Screenshots ==
+
+1. Wordy Brief
+2. Wordy Summary
+3. Wordy Conversation History
 
 == Changelog ==
 
