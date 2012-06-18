@@ -3,7 +3,7 @@
 /*
   Plugin Name: Wordy for WordPress
   Plugin URI: https://wordy.com/wordpress-proofreading-service/
-  Description: Real-time, human, copy-editing and proofreading for everything you write.
+  Description: Real-time, human, copy-editing and proofreading for everything you post.
   Version: 0.1
   Author: Wordy
   Author URI: http://wordy.com
