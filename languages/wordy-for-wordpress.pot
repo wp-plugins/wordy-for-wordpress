@@ -354,7 +354,7 @@ msgstr ""
 
 #. Description of the plugin/theme
 msgid ""
-"Real-time, human, copy-editing and proofreading for everything you write."
+"Real-time, human, copy-editing and proofreading for everything you post."
 msgstr ""
 
 #. Author of the plugin/theme
