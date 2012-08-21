@@ -2,8 +2,8 @@
 Contributors: wordycom
 Tags: copy-editing, copyediting, wordpress, copy-editors, publishing, wordy, grammar, spelling, punctuation, structure, post-publish editing, freelance editors, proofreading, proof reading, real-time, real time
 Requires at least: 3.3.1
-Tested up to: 3.4
-Stable tag: 0.1
+Tested up to: 3.4.1
+Stable tag: 0.1.1
 
 Real-time, human, copy-editing and proofreading for everything you post.
 
@@ -54,5 +54,8 @@ You can send and receive messages from your editor in real-time from your post p
 
 == Changelog ==
 
+= 0.1.1 =
+* Minor clarification of revisions error message
+
 = 0.1 =
-* Initial release.
+* Initial release

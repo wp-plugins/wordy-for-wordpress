@@ -4,7 +4,7 @@
   Plugin Name: Wordy for WordPress
   Plugin URI: https://wordy.com/wordpress-proofreading-service/
   Description: Real-time, human, copy-editing and proofreading for everything you post.
-  Version: 0.1
+  Version: 0.1.1
   Author: Wordy
   Author URI: http://wordy.com
 
@@ -29,7 +29,7 @@ class Wordy_For_WordPress {
     function __construct() {
 
         define( 'WFW_WP_VERSION', '3.3.1' );
-        define( 'WFW_VERSION', '0.1' );
+        define( 'WFW_VERSION', '0.1.1' );
         define( 'WORDY_URL', 'http://wordy.com' );
         define( 'WFW_USER_AGENT', 'Wordy_WordPress/' . WFW_VERSION . ' (+https://wordy.com/wordpress-proofreading-service/)' );
 
@@ -84,15 +84,15 @@ class Wordy_For_WordPress {
         $plugin = plugin_basename( __FILE__ );
         if ( is_plugin_active( $plugin ) ) {
             if ( version_compare( $wp_version, WFW_WP_VERSION, '<' ) ) {
-                $message = sprintf( __( 'Wordy for WordPress requires WordPress %s or higher.', 'wordy-for-wordpress' ), WFW_WP_VERSION );
+                $message = sprintf( __( '<p>Wordy for WordPress requires WordPress %s or higher.</p>', 'wordy-for-wordpress' ), WFW_WP_VERSION );
             } elseif ( !function_exists( 'curl_init' ) ) {
-                $message = __( 'Wordy for WordPress requires cURL to be enabled.', 'wordy-for-wordpress' );
+                $message = __( '<p>Wordy for WordPress requires cURL to be enabled.</p>', 'wordy-for-wordpress' );
             } elseif ( !WP_POST_REVISIONS ) {
-                $message = __( 'Wordy for WordPress requires WordPress revisions to be enabled.', 'wordy-for-wordpress' );
+                $message = __( '<p>Wordy for WordPress requires WordPress revisions to be enabled.</p><p>Please make sure that you are not using a plugin that turns Revisions off.</p><p>If not, then the WP_POST_REVISIONS constant is probably being set to false somewhere in your WordPress files. This is most likely in wp-config.php or wp-settings.php (both of which can be found in the root of your WordPress installation), or the functions.php that resides inside your site\'s active theme.</p>', 'wordy-for-wordpress' );
             }
             if ( isset( $message ) ) {
                 deactivate_plugins( $plugin );
-                $message .= '<p>' . $message . ' ' . __( 'Deactivating Plugin.', 'wordy-for-wordpress' ) . '</p>';
+                $message .= '<p>' . __( 'Deactivating Plugin.', 'wordy-for-wordpress' ) . '</p>';
                 $message .= '<p><a href="' . admin_url() . '">' . __( 'Back to WordPress Admin', 'wordy-for-wordpress' ) . '</a></p>';
                 wp_die( $message );
             }
