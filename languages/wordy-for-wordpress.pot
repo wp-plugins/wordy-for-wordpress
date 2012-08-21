@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Wordy for WordPress package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Wordy for WordPress 0.1\n"
+"Project-Id-Version: Wordy for WordPress 0.1.1\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/wordy-for-wordpress\n"
-"POT-Creation-Date: 2012-06-13 18:36:50+00:00\n"
+"POT-Creation-Date: 2012-08-21 22:21:42+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -37,15 +37,22 @@ msgid "Language"
 msgstr ""
 
 #: wordy-for-wordpress.php:87
-msgid "Wordy for WordPress requires WordPress %s or higher."
+msgid "<p>Wordy for WordPress requires WordPress %s or higher.</p>"
 msgstr ""
 
 #: wordy-for-wordpress.php:89
-msgid "Wordy for WordPress requires cURL to be enabled."
+msgid "<p>Wordy for WordPress requires cURL to be enabled.</p>"
 msgstr ""
 
 #: wordy-for-wordpress.php:91
-msgid "Wordy for WordPress requires WordPress revisions to be enabled."
+msgid ""
+"<p>Wordy for WordPress requires WordPress revisions to be enabled.</"
+"p><p>Please make sure that you are not using a plugin that turns Revisions "
+"off.</p><p>If not, then the WP_POST_REVISIONS constant is probably being set "
+"to false somewhere in your WordPress files. This is most likely in wp-config."
+"php or wp-settings.php (both of which can be found in the root of your "
+"WordPress installation), or the functions.php that resides inside your "
+"site's active theme.</p>"
 msgstr ""
 
 #: wordy-for-wordpress.php:95
@@ -82,7 +89,7 @@ msgstr ""
 msgid "Wordy for WordPress options"
 msgstr ""
 
-#. #-#-#-#-#  wordy-for-wordpress.pot (Wordy for WordPress 0.1)  #-#-#-#-#
+#. #-#-#-#-#  wordy-for-wordpress.pot (Wordy for WordPress 0.1.1)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: wordy-for-wordpress.php:142 wordy-for-wordpress.php:251
 msgid "Wordy for WordPress"
@@ -354,7 +361,7 @@ msgstr ""
 
 #. Description of the plugin/theme
 msgid ""
-"Real-time, human, copy-editing and proofreading for everything you post."
+"Real-time, human, copy-editing and proofreading for everything you write."
 msgstr ""
 
 #. Author of the plugin/theme
