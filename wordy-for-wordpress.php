@@ -4,7 +4,7 @@
   Plugin Name: Wordy for WordPress
   Plugin URI: https://wordy.com/wordpress-proofreading-service/
   Description: Real-time, human, copy-editing and proofreading for everything you post.
-  Version: 0.1.1
+  Version: 0.1.2
   Author: Wordy
   Author URI: http://wordy.com
 
@@ -29,7 +29,7 @@ class Wordy_For_WordPress {
     function __construct() {
 
         define( 'WFW_WP_VERSION', '3.3.1' );
-        define( 'WFW_VERSION', '0.1.1' );
+        define( 'WFW_VERSION', '0.1.2' );
         define( 'WORDY_URL', 'http://wordy.com' );
         define( 'WFW_USER_AGENT', 'Wordy_WordPress/' . WFW_VERSION . ' (+https://wordy.com/wordpress-proofreading-service/)' );
 
@@ -51,7 +51,6 @@ class Wordy_For_WordPress {
         add_filter( 'manage_posts_columns', array( &$this, 'column_headings' ) );
         add_filter( 'manage_pages_columns', array( &$this, 'column_headings' ) );
         add_filter( 'get_sample_permalink_html', array( &$this, 'set_sample_permalink_html' ), '', 4 );
-        //add_filter( 'post_row_actions', array( &$this, 'post_row_actions' ), 10, 2 );
 
         $options = get_option( 'wfw_options' );
         $this->wfw_authorized = (isset( $options['authorized'] ) && $options['authorized'] ? true : false );
@@ -268,30 +267,41 @@ class Wordy_For_WordPress {
         }
     }
 
+    function get_number( $sum ) {
+        $number = sscanf( $sum, '%[^0-9]%s' );
+        return $number[1];
+    }
+
     function add_meta_boxes() {
         global $post;
         global $pagenow;
         if ( in_array( $pagenow, array( 'post.php' ) ) && in_array( $post->post_type, array( 'post', 'page' ) ) ) {
-            $connection = $this->api_connection();
-            $response = $connection->get_account();
+            $wordy_api = $this->api_connection();
+            $response = $wordy_api->get_account();
             if ( $response['error'] ) {
                 $this->wfw_notice = '<div class="error wfw-notice"><p>' . $response['message']['verbose'] . ' ' . '</p></div>';
                 $this->deauthorize();
                 $this->wfw_authorized = false;
+            } else {
+                $balance = $response['message']['balance'];
             }
 
             if ( $this->wfw_authorized ) {
                 $custom_fields = get_post_custom( $post->ID );
                 if ( isset( $custom_fields['wordy_id'] ) ) {
                     $wordy_id = $custom_fields['wordy_id'][0];
-                    $response = $connection->get_job( $wordy_id );
+                    $response = $wordy_api->get_job( $wordy_id );
                     $message = $response['message'];
 
                     if ( !$response['error'] ) {
 
                         switch ( $message['status'] ) {
                             case 'acp':
-                                $this->wfw_notice = '<div class="updated wfw-notice"><p>' . sprintf( __( 'The cost of editing this post is %1$s. Please %2$sConfirm Payment%3$s or %4$sDecline Payment%3$s.', 'wordy-for-wordpress' ), $message['cost'], '<a href="' . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] . '"  class="wordy-api" id="wordy-api-pay">', '</a>', '<a href="' . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] . '"  class="wordy-api" id="wordy-api-reset">' ) . '</p></div>';
+                                if ( $this->get_number( $balance ) < $this->get_number( $message['cost'] ) ) {
+                                    $this->wfw_notice = '<div class="updated wfw-notice"><p>' . sprintf( __( 'The cost of editing this post is %1$s. You do not have sufficient credit. Please %2$stop up your account%3$s then refresh this page.', 'wordy-for-wordpress' ), $message['cost'], '<a href="http://wordy.com" target="_blank">', '</a>' ) . '</p></div>';
+                                } else {
+                                    $this->wfw_notice = '<div class="updated wfw-notice"><p>' . sprintf( __( 'The cost of editing this post is %1$s. Please %2$sConfirm Payment%3$s or %4$sDecline Payment%3$s.', 'wordy-for-wordpress' ), $message['cost'], '<a href="' . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] . '"  class="wordy-api" id="wordy-api-pay">', '</a>', '<a href="' . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] . '"  class="wordy-api" id="wordy-api-reset">' ) . '</p></div>';
+                                }
                                 break;
 
                             case 'aer':
@@ -340,22 +350,22 @@ class Wordy_For_WordPress {
                         }
                     } else {
                         $this->wfw_notice = '<div class="error wfw-notice"><p>Error: ' . $message['verbose'] . ' ' . '</p></div>';
-                        if ( 'permission denied' == $message['error'] ) {
+                        if ( in_array( $message['error'], array( 'permission denied', 'failed' ) ) ) {
                             $this->reset( $post->ID );
                         }
                     }
                 }
             }
         }
-                        if ( get_post_meta( $post->ID, 'wordy_id', true ) ) {
-                    add_meta_box( '-wfw-conversation-meta-box', __( 'Wordy Conversation History', 'wordy-for-wordpress' ), array( &$this, 'wfw_conversation_meta_box' ), 'post', 'normal', 'high' );
-                    add_meta_box( 'wfw-summary-meta-box', __( 'Wordy Summary', 'wordy-for-wordpress' ), array( &$this, 'wfw_summary_meta_box' ), 'post', 'side', 'high' );
-                    add_meta_box( '-wfw-conversation-meta-box', __( 'Wordy Conversation History', 'wordy-for-wordpress' ), array( &$this, 'wfw_conversation_meta_box' ), 'page', 'normal', 'high' );
-                    add_meta_box( 'wfw-summary-meta-box', __( 'Wordy Summary', 'wordy-for-wordpress' ), array( &$this, 'wfw_summary_meta_box' ), 'page', 'side', 'high' );
-                } else {
-                    add_meta_box( 'wfw-brief-meta-box', __( 'Wordy Brief', 'wordy-for-wordpress' ), array( &$this, 'wfw_brief_meta_box' ), 'post', 'side', 'high' );
-                    add_meta_box( 'wfw-brief-meta-box', __( 'Wordy Brief', 'wordy-for-wordpress' ), array( &$this, 'wfw_brief_meta_box' ), 'page', 'side', 'high' );
-                }
+        if ( get_post_meta( $post->ID, 'wordy_id', true ) ) {
+            add_meta_box( '-wfw-conversation-meta-box', __( 'Wordy Conversation History', 'wordy-for-wordpress' ), array( &$this, 'wfw_conversation_meta_box' ), 'post', 'normal', 'high' );
+            add_meta_box( 'wfw-summary-meta-box', __( 'Wordy Summary', 'wordy-for-wordpress' ), array( &$this, 'wfw_summary_meta_box' ), 'post', 'side', 'high' );
+            add_meta_box( '-wfw-conversation-meta-box', __( 'Wordy Conversation History', 'wordy-for-wordpress' ), array( &$this, 'wfw_conversation_meta_box' ), 'page', 'normal', 'high' );
+            add_meta_box( 'wfw-summary-meta-box', __( 'Wordy Summary', 'wordy-for-wordpress' ), array( &$this, 'wfw_summary_meta_box' ), 'page', 'side', 'high' );
+        } else {
+            add_meta_box( 'wfw-brief-meta-box', __( 'Wordy Brief', 'wordy-for-wordpress' ), array( &$this, 'wfw_brief_meta_box' ), 'post', 'side', 'high' );
+            add_meta_box( 'wfw-brief-meta-box', __( 'Wordy Brief', 'wordy-for-wordpress' ), array( &$this, 'wfw_brief_meta_box' ), 'page', 'side', 'high' );
+        }
     }
 
     function translate_api_messages( $api_message ) {
@@ -367,7 +377,7 @@ class Wordy_For_WordPress {
             'c' => __( 'Complete', 'wordy-for-wordpress' ),
             'no matching key' => __( 'We can\'t find that API key.', 'wordy-for-wordpress' ),
             'no matching user' => __( 'We can\'t find that API username.', 'wordy-for-wordpress' ),
-            'job couldn\'t be paid off' => __( 'You do not have sufficient credit.', 'wordy-for-wordpress' )
+            'job couldn\'t be paid off' => sprintf( __( 'You do not have sufficient credit. Please %1$stop up your account%2$s then refresh this page.', 'wordy-for-wordpress' ), '<a href="' . WORDY_URL . '/pricing/" target=_"blank">', '</a>' )
         );
         if ( array_key_exists( strtolower( $api_message ), $wfw_messages ) ) {
             return $wfw_messages[strtolower( $api_message )];
@@ -386,15 +396,18 @@ class Wordy_For_WordPress {
             $wordy_api = $this->api_connection();
             $response = $wordy_api->get_job( $wordy_id );
             $message = $response['message'];
-            echo '<div class="misc-pub-section">' . __( 'Status', 'wordy-for-wordpress' ) . ': <span style="font-weight: bold;">' . $this->translate_api_messages( $message['status'] ) . '</span></div>';
-            echo '<div class="misc-pub-section">' . __( 'Language', 'wordy-for-wordpress' ) . ': ' . $message['source_language_name'][1] . '</div>';
-            echo '<div class="misc-pub-section">' . __( 'Rewriting', 'wordy-for-wordpress' ) . ': ' . ($message['intrusive_editing'] ? 'Yes' : 'No') . '</div>';
-            echo '<div class="misc-pub-section">' . __( 'Source word count', 'wordy-for-wordpress' ) . ': ' . $message['source_word_count'] . '</div>';
-            echo '<div class="misc-pub-section">' . __( 'Cost', 'wordy-for-wordpress' ) . ': ' . $message['cost'] . '</div>';
-            echo '<div class="misc-pub-section">' . __( 'Created', 'wordy-for-wordpress' ) . ': ' . date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $message['created'] ) . '</div>';
-            echo '<div class="misc-pub-section">' . __( 'Delivery date', 'wordy-for-wordpress' ) . ': ' . date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $message['delivery_date'] ) . '</div>';
-            echo '<div class="misc-pub-section"><a href="' . WORDY_URL . $message['display_url'] . '" target="_blank">' . sprintf( __( 'View job %d on Wordy.com', 'wordy-for-wordpress' ), $message['id'] ) . '</a></div>';
-            echo '<div style="clear:both;"></div>';
+            $response = $wordy_api->get_account();
+            if ( !$response['error'] ) {
+                echo '<div class="misc-pub-section">' . __( 'Status', 'wordy-for-wordpress' ) . ': <span style="font-weight: bold;">' . $this->translate_api_messages( $message['status'] ) . '</span></div>';
+                echo '<div class="misc-pub-section">' . __( 'Language', 'wordy-for-wordpress' ) . ': ' . $message['source_language_name'][1] . '</div>';
+                echo '<div class="misc-pub-section">' . __( 'Rewriting', 'wordy-for-wordpress' ) . ': ' . ($message['intrusive_editing'] ? 'Yes' : 'No') . '</div>';
+                echo '<div class="misc-pub-section">' . __( 'Source word count', 'wordy-for-wordpress' ) . ': ' . $message['source_word_count'] . '</div>';
+                echo '<div class="misc-pub-section">' . __( 'Cost', 'wordy-for-wordpress' ) . ': ' . $message['cost'] . ' <span ' . ($this->get_number( $response['message']['balance'] ) < $this->get_number( $message['cost'] ) ? 'style="font-weight: bold;"' : 'style="font-style: italic;"' . 'style="font-style: italic;"') . '>(' . __( 'Balance', 'wordy-for-wordpress' ) . ': ' . $response['message']['balance'] . ')</span></div>';
+                echo '<div class="misc-pub-section">' . __( 'Created', 'wordy-for-wordpress' ) . ': ' . date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $message['created'] ) . '</div>';
+                echo '<div class="misc-pub-section">' . __( 'Delivery date', 'wordy-for-wordpress' ) . ': ' . date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $message['delivery_date'] ) . '</div>';
+                echo '<div class="misc-pub-section"><a href="' . WORDY_URL . $message['display_url'] . '" target="_blank">' . sprintf( __( 'View job %d on Wordy.com', 'wordy-for-wordpress' ), $message['id'] ) . '</a></div>';
+                echo '<div style="clear:both;"></div>';
+            }
         }
     }
 
@@ -468,17 +481,19 @@ class Wordy_For_WordPress {
             $custom_fields = get_post_custom( $post_id );
             $wordy_id = $custom_fields['wordy_id'][0];
             $conversation = $wordy_api->get_conversation( $wordy_id );
-            foreach ( $conversation['message'] as $part ) {
-                if ( !isset( $client ) ) {
-                    $client = $part['user'];
+            if ( $conversation['message'] ) {
+                foreach ( $conversation['message'] as $part ) {
+                    if ( !isset( $client ) ) {
+                        $client = $part['user'];
+                    }
+                    $party = ($client == $part['user'] ? 'wfw-client' : 'wfw-editor');
+                    echo '<div class="' . $party . '">';
+                    echo '<div class="wfw-quote">';
+                    echo '<p>' . $part['message'] . '<br />';
+                    echo '<span class="wfw-timestamp">' . sprintf( __( '%1$s on %2$s', 'wordy-for-wordpress' ), '<span class="wfw-name">' . $part['user'] . '</span>', date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $part['created'] ) ) . '</span></p>';
+                    echo '</div>';
+                    echo '</div>';
                 }
-                $party = ($client == $part['user'] ? 'wfw-client' : 'wfw-editor');
-                echo '<div class="' . $party . '">';
-                echo '<div class="wfw-quote">';
-                echo '<p>' . $part['message'] . '<br />';
-                echo '<span class="wfw-timestamp">' . sprintf( __( '%1$s on %2$s', 'wordy-for-wordpress' ), '<span class="wfw-name">' . $part['user'] . '</span>', date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $part['created'] ) ) . '</span></p>';
-                echo '</div>';
-                echo '</div>';
             }
         }
         die();
@@ -502,7 +517,7 @@ class Wordy_For_WordPress {
             $post_id = $_GET['post_id'];
             $command = $_GET['command'];
             $custom_fields = get_post_custom( $post_id );
-                $wordy_id = $custom_fields['wordy_id'][0];
+            $wordy_id = $custom_fields['wordy_id'][0];
 
 
             switch ( $command ) {

@@ -68,7 +68,7 @@ jQuery(function ($) {
       },
       success: function(data) {
         if (data) {
-          if ('NaN' == parseInt(data.message)) {
+          if (isNaN(parseInt(data.message))) {
             // If response is a string, update message but don't reload
             $('.wfw-notice').html(data.message);
           } else {
