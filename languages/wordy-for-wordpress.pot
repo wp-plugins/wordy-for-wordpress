@@ -1,0 +1,373 @@
+# Copyright (C) 2012 Wordy for WordPress
+# This file is distributed under the same license as the Wordy for WordPress package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Wordy for WordPress 0.1.1\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/wordy-for-wordpress\n"
+"POT-Creation-Date: 2012-08-21 22:21:42+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2012-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: wordy-for-wordpress.php:71 wordy-for-wordpress.php:183
+msgid "Account"
+msgstr ""
+
+#: wordy-for-wordpress.php:73
+msgid "Username"
+msgstr ""
+
+#: wordy-for-wordpress.php:74
+msgid "API Key"
+msgstr ""
+
+#: wordy-for-wordpress.php:76 wordy-for-wordpress.php:188
+msgid "Options"
+msgstr ""
+
+#: wordy-for-wordpress.php:77
+msgid "Content rewrite"
+msgstr ""
+
+#: wordy-for-wordpress.php:78 wordy-for-wordpress.php:390
+msgid "Language"
+msgstr ""
+
+#: wordy-for-wordpress.php:87
+msgid "<p>Wordy for WordPress requires WordPress %s or higher.</p>"
+msgstr ""
+
+#: wordy-for-wordpress.php:89
+msgid "<p>Wordy for WordPress requires cURL to be enabled.</p>"
+msgstr ""
+
+#: wordy-for-wordpress.php:91
+msgid ""
+"<p>Wordy for WordPress requires WordPress revisions to be enabled.</"
+"p><p>Please make sure that you are not using a plugin that turns Revisions "
+"off.</p><p>If not, then the WP_POST_REVISIONS constant is probably being set "
+"to false somewhere in your WordPress files. This is most likely in wp-config."
+"php or wp-settings.php (both of which can be found in the root of your "
+"WordPress installation), or the functions.php that resides inside your "
+"site's active theme.</p>"
+msgstr ""
+
+#: wordy-for-wordpress.php:95
+msgid "Deactivating Plugin."
+msgstr ""
+
+#: wordy-for-wordpress.php:96
+msgid "Back to WordPress Admin"
+msgstr ""
+
+#: wordy-for-wordpress.php:104
+msgid "The email address you use to log in to Wordy"
+msgstr ""
+
+#: wordy-for-wordpress.php:109
+msgid "API key generated %1$sfrom your account"
+msgstr ""
+
+#: wordy-for-wordpress.php:115
+msgid ""
+"Substantially reword content to improve consistency, flow and the natural "
+"use of language"
+msgstr ""
+
+#: wordy-for-wordpress.php:124
+msgid "The language of your content"
+msgstr ""
+
+#: wordy-for-wordpress.php:137
+msgid "Please enter your Wordy API email and key %1$shere%2$s"
+msgstr ""
+
+#: wordy-for-wordpress.php:142
+msgid "Wordy for WordPress options"
+msgstr ""
+
+#. #-#-#-#-#  wordy-for-wordpress.pot (Wordy for WordPress 0.1.1)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: wordy-for-wordpress.php:142 wordy-for-wordpress.php:251
+msgid "Wordy for WordPress"
+msgstr ""
+
+#: wordy-for-wordpress.php:155
+msgid ""
+" Wordy for WordPress lets you seamlessly send your blog posts to Wordy.com "
+"for real-time human proofreading and copy-editing – all without leaving "
+"WordPress."
+msgstr ""
+
+#: wordy-for-wordpress.php:156
+msgid ""
+"<strong>Wordy Brief</strong> - When you create a job, enter your brief to "
+"the editor before sending your post to Wordy for a free instant price quote."
+msgstr ""
+
+#: wordy-for-wordpress.php:157
+msgid ""
+"<strong>Wordy Conversation History</strong> - Once you've sent your post to "
+"Wordy and confirmed the payment, you can communicate directly with your "
+"editor in the Conversation History. Simply write your message and send it."
+msgstr ""
+
+#: wordy-for-wordpress.php:158
+msgid ""
+"<strong>Wordy Summary</strong> - For all open jobs, the Summary window shows "
+"you the current status, including estimated delivery time, price and word "
+"count."
+msgstr ""
+
+#: wordy-for-wordpress.php:159
+msgid ""
+"Once your post has been edited and returned by the editor, you can see the "
+"changes made to the post by clicking “Compare to Wordy edit” or “Load Wordy "
+"edit” beneath your post’s title field."
+msgstr ""
+
+#: wordy-for-wordpress.php:169
+msgid ""
+"Wordy is a professional, human, copy-editing and proofreading service that "
+"optimises the accuracy and readability of content – from Fortune 500 "
+"business reports to academic texts, website copy and your blog posts."
+msgstr ""
+
+#: wordy-for-wordpress.php:170
+msgid ""
+"If you do not have a Wordy account yet %1$syou can sign up for free%2$s or %3"
+"$stake a tour of Wordy%2$s before you do anything. If you have any questions "
+"or comments about Wordy, you're more than welcome to %4$scontact us%2$s."
+msgstr ""
+
+#: wordy-for-wordpress.php:171
+msgid ""
+"Enter your username (the email address you use to log in to Wordy) and an "
+"API key generated from your account."
+msgstr ""
+
+#: wordy-for-wordpress.php:172
+msgid ""
+"If you do not have a Wordy account yet you can %1$ssign up for free%2$s."
+msgstr ""
+
+#: wordy-for-wordpress.php:173
+msgid ""
+"Choose whether you want your posts rewritten by Wordy by default. By "
+"choosing rewriting your editor will substantially reword content to improve "
+"consistency, flow and the natural use of language."
+msgstr ""
+
+#: wordy-for-wordpress.php:174
+msgid ""
+"Select the default language of your blog; all your posts will be edited in "
+"this language."
+msgstr ""
+
+#: wordy-for-wordpress.php:178
+msgid "Overview"
+msgstr ""
+
+#: wordy-for-wordpress.php:192
+msgid "For more information:"
+msgstr ""
+
+#: wordy-for-wordpress.php:192
+msgid "Wordy for WordPress Guide"
+msgstr ""
+
+#: wordy-for-wordpress.php:198
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: wordy-for-wordpress.php:202
+msgid "Wordy For WordPress Settings"
+msgstr ""
+
+#: wordy-for-wordpress.php:203
+msgid ""
+"Wordy for WordPress lets you seamlessly add real-time human proofreading and "
+"copy-editing to your WordPress blog posts. Editors optimise the accuracy and "
+"readability of your content making it a pleasure to read and link to. %1"
+"$sLearn more about Wordy%2$s or %3$ssign up for free%2$s."
+msgstr ""
+
+#: wordy-for-wordpress.php:207
+msgid "Save Changes"
+msgstr ""
+
+#: wordy-for-wordpress.php:225
+msgid "Wordy Account Email must be a valid email address"
+msgstr ""
+
+#: wordy-for-wordpress.php:238
+msgid "Settings Saved."
+msgstr ""
+
+#: wordy-for-wordpress.php:260
+msgid "Signed in as: %1$s"
+msgstr ""
+
+#: wordy-for-wordpress.php:261
+msgid "API key: %1$s"
+msgstr ""
+
+#: wordy-for-wordpress.php:262
+msgid "Language: %1$s"
+msgstr ""
+
+#: wordy-for-wordpress.php:263
+msgid "Content rewrite: %1$s"
+msgstr ""
+
+#: wordy-for-wordpress.php:264
+msgid "Account balance: %1$s %2$sTop up account%3$s"
+msgstr ""
+
+#: wordy-for-wordpress.php:294
+msgid ""
+"The cost of editing this post is %1$s. Please %2$sConfirm Payment%3$s or %4"
+"$sDecline Payment%3$s."
+msgstr ""
+
+#: wordy-for-wordpress.php:298
+msgid "Awaiting editor response."
+msgstr ""
+
+#: wordy-for-wordpress.php:300
+msgid "New job created successfully. Estimated delivery time is %1$s."
+msgstr ""
+
+#: wordy-for-wordpress.php:333
+msgid ""
+"Wordy is awaiting your response. %1$sAccept Wordy's edit%2$s or %3$sreject "
+"Wordy's edit%2$s."
+msgstr ""
+
+#: wordy-for-wordpress.php:338
+msgid "Wordy edit complete."
+msgstr ""
+
+#: wordy-for-wordpress.php:351 wordy-for-wordpress.php:353
+msgid "Wordy Conversation History"
+msgstr ""
+
+#: wordy-for-wordpress.php:352 wordy-for-wordpress.php:354
+msgid "Wordy Summary"
+msgstr ""
+
+#: wordy-for-wordpress.php:356 wordy-for-wordpress.php:357
+msgid "Wordy Brief"
+msgstr ""
+
+#: wordy-for-wordpress.php:363
+msgid "Awaiting word count"
+msgstr ""
+
+#: wordy-for-wordpress.php:364
+msgid "Awaiting customer payment"
+msgstr ""
+
+#: wordy-for-wordpress.php:365
+msgid "Awaiting editor response"
+msgstr ""
+
+#: wordy-for-wordpress.php:366
+msgid "Awaiting customer response"
+msgstr ""
+
+#: wordy-for-wordpress.php:367
+msgid "Complete"
+msgstr ""
+
+#: wordy-for-wordpress.php:368
+msgid "We can't find that API key."
+msgstr ""
+
+#: wordy-for-wordpress.php:369
+msgid "We can't find that API username."
+msgstr ""
+
+#: wordy-for-wordpress.php:370
+msgid "You do not have sufficient credit."
+msgstr ""
+
+#: wordy-for-wordpress.php:389
+msgid "Status"
+msgstr ""
+
+#: wordy-for-wordpress.php:391
+msgid "Rewriting"
+msgstr ""
+
+#: wordy-for-wordpress.php:392
+msgid "Source word count"
+msgstr ""
+
+#: wordy-for-wordpress.php:393
+msgid "Cost"
+msgstr ""
+
+#: wordy-for-wordpress.php:394
+msgid "Created"
+msgstr ""
+
+#: wordy-for-wordpress.php:395
+msgid "Delivery date"
+msgstr ""
+
+#: wordy-for-wordpress.php:396
+msgid "View job %d on Wordy.com"
+msgstr ""
+
+#: wordy-for-wordpress.php:402 wordy-for-wordpress.php:403
+msgid "Your comments or instructions to the editor"
+msgstr ""
+
+#: wordy-for-wordpress.php:404 wordy-for-wordpress.php:608
+msgid "Send to Wordy"
+msgstr ""
+
+#: wordy-for-wordpress.php:412
+msgid "Write message"
+msgstr ""
+
+#: wordy-for-wordpress.php:413
+msgid "Send message"
+msgstr ""
+
+#: wordy-for-wordpress.php:479
+msgid "%1$s on %2$s"
+msgstr ""
+
+#: wordy-for-wordpress.php:573
+msgid "Wordy Status"
+msgstr ""
+
+#: wordy-for-wordpress.php:618
+msgid "Load Wordy edit"
+msgstr ""
+
+#: wordy-for-wordpress.php:619
+msgid "Compare to Wordy edit"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://wordy.com/wordpress-proofreading-service/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Real-time, human, copy-editing and proofreading for everything you write."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Wordy"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://wordy.com"
+msgstr ""
