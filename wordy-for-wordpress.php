@@ -4,7 +4,7 @@
   Plugin Name: Wordy for WordPress
   Plugin URI: https://wordy.com/wordpress-proofreading-service/
   Description: Real-time, human, copy-editing and proofreading for everything you post.
-  Version: 0.1.2
+  Version: 0.1.3
   Author: Wordy
   Author URI: http://wordy.com
 
@@ -29,7 +29,7 @@ class Wordy_For_WordPress {
     function __construct() {
 
         define( 'WFW_WP_VERSION', '3.3.1' );
-        define( 'WFW_VERSION', '0.1.2' );
+        define( 'WFW_VERSION', '0.1.3' );
         define( 'WORDY_URL', 'http://wordy.com' );
         define( 'WFW_USER_AGENT', 'Wordy_WordPress/' . WFW_VERSION . ' (+https://wordy.com/wordpress-proofreading-service/)' );
 
@@ -253,16 +253,16 @@ class Wordy_For_WordPress {
 
     function dashboard_widget() {
         $wordy_api = $this->api_connection();
-        $response = $wordy_api->get_account();
-        if ( !$response['error'] ) {
+        $account = $wordy_api->get_account();
+        if ( !$account['error'] ) {
             $options = get_option( 'wfw_options' );
             echo '<p>' . sprintf( __( 'Signed in as: %1$s', 'wordy-for-wordpress' ), $options['api_username'] ) . '</p>';
             echo '<p>' . sprintf( __( 'API key: %1$s', 'wordy-for-wordpress' ), $options['api_key'] ) . '</p>';
             echo '<p>' . sprintf( __( 'Language: %1$s', 'wordy-for-wordpress' ), $options['languages'][$options['language_id']] ) . '</p>';
             echo '<p>' . sprintf( __( 'Content rewrite: %1$s', 'wordy-for-wordpress' ), ($options['content_rewrite'] ? 'Yes' : 'No' ) ) . '</p>';
-            echo '<p>' . sprintf( __( 'Account balance: %1$s %2$sTop up account%3$s', 'wordy-for-wordpress' ), $response['message']['balance'], '<a href="' . WORDY_URL . '/pricing/" target=_"blank">', '</a>' ) . '</p>';
+            echo '<p>' . sprintf( __( 'Account balance: %1$s %2$sTop up account%3$s', 'wordy-for-wordpress' ), $account['message']['balance'], '<a href="' . WORDY_URL . '/pricing/" target=_"blank">', '</a>' ) . '</p>';
         } else {
-            echo '<p>Error: ' . $response['message']['verbose'] . '</p>';
+            echo '<p>Error: ' . $account['message']['verbose'] . '</p>';
             $this->deauthorize();
         }
     }
@@ -277,23 +277,23 @@ class Wordy_For_WordPress {
         global $pagenow;
         if ( in_array( $pagenow, array( 'post.php' ) ) && in_array( $post->post_type, array( 'post', 'page' ) ) ) {
             $wordy_api = $this->api_connection();
-            $response = $wordy_api->get_account();
-            if ( $response['error'] ) {
-                $this->wfw_notice = '<div class="error wfw-notice"><p>' . $response['message']['verbose'] . ' ' . '</p></div>';
+            $account = $wordy_api->get_account();
+            if ( $account['error'] ) {
+                $this->wfw_notice = '<div class="error wfw-notice"><p>' . $account['message']['verbose'] . ' ' . '</p></div>';
                 $this->deauthorize();
                 $this->wfw_authorized = false;
             } else {
-                $balance = $response['message']['balance'];
+                $balance = $account['message']['balance'];
             }
 
             if ( $this->wfw_authorized ) {
                 $custom_fields = get_post_custom( $post->ID );
                 if ( isset( $custom_fields['wordy_id'] ) ) {
                     $wordy_id = $custom_fields['wordy_id'][0];
-                    $response = $wordy_api->get_job( $wordy_id );
-                    $message = $response['message'];
+                    $job = $wordy_api->get_job( $wordy_id );
+                    $message = $job['message'];
 
-                    if ( !$response['error'] ) {
+                    if ( !$job['error'] ) {
 
                         switch ( $message['status'] ) {
                             case 'acp':
@@ -314,7 +314,7 @@ class Wordy_For_WordPress {
                             case 'acr':
                                 $new_revision = false;
 
-                                $edited_post = $connection->get_edited( $wordy_id );
+                                $edited_post = $wordy_api->get_edited( $wordy_id );
                                 if ( isset( $custom_fields['wfw_revision_id'] ) ) {
                                     $revision_id = $custom_fields['wfw_revision_id'][0];
                                     $revision = get_post( $revision_id );
@@ -394,15 +394,15 @@ class Wordy_For_WordPress {
             date_default_timezone_set( $this->timezone );
             $wordy_id = $custom_fields['wordy_id'][0];
             $wordy_api = $this->api_connection();
-            $response = $wordy_api->get_job( $wordy_id );
-            $message = $response['message'];
-            $response = $wordy_api->get_account();
-            if ( !$response['error'] ) {
+            $job = $wordy_api->get_job( $wordy_id );
+            $message = $job['message'];
+            $account = $wordy_api->get_account();
+            if ( !$account['error'] ) {
                 echo '<div class="misc-pub-section">' . __( 'Status', 'wordy-for-wordpress' ) . ': <span style="font-weight: bold;">' . $this->translate_api_messages( $message['status'] ) . '</span></div>';
                 echo '<div class="misc-pub-section">' . __( 'Language', 'wordy-for-wordpress' ) . ': ' . $message['source_language_name'][1] . '</div>';
                 echo '<div class="misc-pub-section">' . __( 'Rewriting', 'wordy-for-wordpress' ) . ': ' . ($message['intrusive_editing'] ? 'Yes' : 'No') . '</div>';
                 echo '<div class="misc-pub-section">' . __( 'Source word count', 'wordy-for-wordpress' ) . ': ' . $message['source_word_count'] . '</div>';
-                echo '<div class="misc-pub-section">' . __( 'Cost', 'wordy-for-wordpress' ) . ': ' . $message['cost'] . ' <span ' . ($this->get_number( $response['message']['balance'] ) < $this->get_number( $message['cost'] ) ? 'style="font-weight: bold;"' : 'style="font-style: italic;"' . 'style="font-style: italic;"') . '>(' . __( 'Balance', 'wordy-for-wordpress' ) . ': ' . $response['message']['balance'] . ')</span></div>';
+                echo '<div class="misc-pub-section">' . __( 'Cost', 'wordy-for-wordpress' ) . ': ' . $message['cost'] . ' <span ' . ($this->get_number( $account['message']['balance'] ) < $this->get_number( $message['cost'] ) ? 'style="font-weight: bold;"' : 'style="font-style: italic;"' . 'style="font-style: italic;"') . '>(' . __( 'Balance', 'wordy-for-wordpress' ) . ': ' . $account['message']['balance'] . ')</span></div>';
                 echo '<div class="misc-pub-section">' . __( 'Created', 'wordy-for-wordpress' ) . ': ' . date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $message['created'] ) . '</div>';
                 echo '<div class="misc-pub-section">' . __( 'Delivery date', 'wordy-for-wordpress' ) . ': ' . date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $message['delivery_date'] ) . '</div>';
                 echo '<div class="misc-pub-section"><a href="' . WORDY_URL . $message['display_url'] . '" target="_blank">' . sprintf( __( 'View job %d on Wordy.com', 'wordy-for-wordpress' ), $message['id'] ) . '</a></div>';
@@ -444,11 +444,11 @@ class Wordy_For_WordPress {
 
         if ( isset( $_REQUEST['send_to_wordy'] ) ) {
             if ( !wp_is_post_revision( $post_id ) ) {
-                $connection = $this->api_connection();
+                $wordy_api = $this->api_connection();
                 $options = get_option( 'wfw_options' );
-                $connection->set_language_id( $options['language_id'] );
-                $connection->set_intrusive_editing( $options['content_rewrite'] ? 'true' : 'false'  );
-                $connection->set_user_agent( WFW_USER_AGENT );
+                $wordy_api->set_language_id( $options['language_id'] );
+                $wordy_api->set_intrusive_editing( $options['content_rewrite'] ? 'true' : 'false'  );
+                $wordy_api->set_user_agent( WFW_USER_AGENT );
                 $post = get_post( $post_id );
                 if ( in_array( $_POST['post_type'], array( 'post', 'page' ) ) ) {
                     $brief = $_POST['brief'];
@@ -458,9 +458,8 @@ class Wordy_For_WordPress {
                     if ( $post->post_excerpt )
                         $json['excerpt'] = $post->post_excerpt;
 
-                    $response = $connection->create_job( array( 'brief' => $brief, 'json' => $json ) );
-                    $message = $response['message'];
-                    update_post_meta( $post_id, 'wordy_id', $message['id'] );
+                    $job = $wordy_api->create_job( array( 'brief' => $brief, 'json' => $json ) );
+                    update_post_meta( $post_id, 'wordy_id', $job['message']['id'] );
                 }
             }
         }
@@ -523,20 +522,20 @@ class Wordy_For_WordPress {
             switch ( $command ) {
 
                 case 'wordy-api-pay':
-                    $response = $wordy_api->pay_job( $wordy_id );
-                    if ( $response['error'] ) {
-                        echo json_encode( array( 'message' => '<p>' . $this->translate_api_messages( $response['message']['verbose'] ) . '</p>' ) );
+                    $job = $wordy_api->pay_job( $wordy_id );
+                    if ( $job['error'] ) {
+                        echo json_encode( array( 'message' => '<p>' . $this->translate_api_messages( $job['message']['verbose'] ) . '</p>' ) );
                     } else {
                         echo json_encode( array( 'message' => 100 ) );
                     }
                     break;
 
                 case 'wordy-api-confirm':
-                    $wordy_api = $wordy_api->confirm_job( $wordy_id );
+                    $wordy_api->confirm_job( $wordy_id );
                     break;
 
                 case 'wordy-api-reject':
-                    $response = $wordy_api->reject_job( $wordy_id );
+                    $wordy_api->reject_job( $wordy_id );
                     echo json_encode( array( 'message' => 0 ) );
                     break;
 
@@ -594,15 +593,13 @@ class Wordy_For_WordPress {
         if ( 'wordy_status' == $column_name ) {
             $wordy_id = $this->get_wordy_id( $id );
             if ( is_array( $this->job_list['message'] ) && in_array( $wordy_id, $this->job_list['message'] ) ) {
-                $connection = $this->api_connection();
-                $wordy_api = $connection->get_job( $wordy_id );
-                $message = $wordy_api['message'];
-                if ( $wordy_api['error'] ) {
-                    echo $message['verbose'];
+                $wordy_api = $this->api_connection();
+                $job = $wordy_api->get_job( $wordy_id );
+                if ( $job['error'] ) {
+                    echo $job['message']['verbose'];
                     $this->deauthorize();
                 } else {
-                    $response = $wordy_api['message'];
-                    echo $this->translate_api_messages( $message['status'] );
+                    echo $this->translate_api_messages( $job['message']['status'] );
                 }
             } else {
                 echo '-';
