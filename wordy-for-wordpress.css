@@ -78,7 +78,11 @@
 
 div.wfw-notice {
   background: #ffffe0 url(images/logo.png) no-repeat 0 -34px;
-  padding-left: 36px;
+  padding: 10px 0 0 36px;
+}
+
+#load-wordy-edit {
+  padding-right: 10px;
 }
 
 div.wfw-notice a {
@@ -89,6 +93,7 @@ div.wfw-notice a {
   background: transparent url(images/logo.png) no-repeat 0 0;
 }
 
-#load-wordy-edit {
-  margin-left: 20px;
+/*Hide backup message*/
+#local-storage-notice {
+    display: none !important;
 }

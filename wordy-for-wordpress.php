@@ -4,9 +4,9 @@
   Plugin Name: Wordy for WordPress
   Plugin URI: https://wordy.com/wordpress-proofreading-service/
   Description: Real-time, human, copy-editing and proofreading for everything you post.
-  Version: 0.1.3
+  Version: 0.1.4
   Author: Wordy
-  Author URI: http://wordy.com
+  Author URI: https://wordy.com/
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License, version 2, as
@@ -25,12 +25,13 @@
 class Wordy_For_WordPress {
 
     private $wfw_notice = '';
-
+    private $nonce = '';
+    private $revision_id = '';
     function __construct() {
 
         define( 'WFW_WP_VERSION', '3.3.1' );
-        define( 'WFW_VERSION', '0.1.3' );
-        define( 'WORDY_URL', 'http://wordy.com' );
+        define( 'WFW_VERSION', '0.1.4' );
+        define( 'WORDY_URL', 'https://wordy.com/' );
         define( 'WFW_USER_AGENT', 'Wordy_WordPress/' . WFW_VERSION . ' (+https://wordy.com/wordpress-proofreading-service/)' );
 
         add_action( 'plugins_loaded', array( &$this, 'load_languages' ) );
@@ -50,7 +51,6 @@ class Wordy_For_WordPress {
         add_action( 'manage_pages_custom_column', array( &$this, 'custom_column' ), 10, 2 );
         add_filter( 'manage_posts_columns', array( &$this, 'column_headings' ) );
         add_filter( 'manage_pages_columns', array( &$this, 'column_headings' ) );
-        add_filter( 'get_sample_permalink_html', array( &$this, 'set_sample_permalink_html' ), '', 4 );
 
         $options = get_option( 'wfw_options' );
         $this->wfw_authorized = (isset( $options['authorized'] ) && $options['authorized'] ? true : false );
@@ -170,7 +170,7 @@ class Wordy_For_WordPress {
                 $account_help = '<p>' . sprintf( __( 'Enter your username (the email address you use to log in to Wordy) and an API key generated from your account.', 'wordy-for-wordpress' ) ) . '</p>';
                 $account_help .= '<p>' . sprintf( __( 'If you do not have a Wordy account yet you can %1$ssign up for free%2$s.', 'wordy-for-wordpress' ), '<a href="' . WORDY_URL . '/accounts/signup/" target="_blank">', '</a>' ) . '</p>';
                 $options_help = '<p>' . __( 'Choose whether you want your posts rewritten by Wordy by default. By choosing rewriting your editor will substantially reword content to improve consistency, flow and the natural use of language.', 'wordy-for-wordpress' ) . '</p>';
-                $options_help .= '<p>' . __( 'Select the default language of your blog; all your posts will be edited in this language.', 'wordy-for-wordpress' ) . '</p>';
+                $options_help .= '<p>' . __( 'Select the default language of your blog; all your posts will be edited in this language.', 'wordy-for-wordpress' ) . '</p>©346';
 
                 $screen->add_help_tab( array(
                     'id' => 'wfw-overview-help',
@@ -298,7 +298,7 @@ class Wordy_For_WordPress {
                         switch ( $message['status'] ) {
                             case 'acp':
                                 if ( $this->get_number( $balance ) < $this->get_number( $message['cost'] ) ) {
-                                    $this->wfw_notice = '<div class="updated wfw-notice"><p>' . sprintf( __( 'The cost of editing this post is %1$s. You do not have sufficient credit. Please %2$stop up your account%3$s then refresh this page.', 'wordy-for-wordpress' ), $message['cost'], '<a href="http://wordy.com" target="_blank">', '</a>' ) . '</p></div>';
+                                    $this->wfw_notice = '<div class="updated wfw-notice"><p>' . sprintf( __( 'The cost of editing this post is %1$s. You do not have sufficient credit. Please %2$stop up your account%3$s then refresh this page.', 'wordy-for-wordpress' ), $message['cost'], '<a href="https://wordy.com/" target="_blank">', '</a>' ) . '</p></div>';
                                 } else {
                                     $this->wfw_notice = '<div class="updated wfw-notice"><p>' . sprintf( __( 'The cost of editing this post is %1$s. Please %2$sConfirm Payment%3$s or %4$sDecline Payment%3$s.', 'wordy-for-wordpress' ), $message['cost'], '<a href="' . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] . '"  class="wordy-api" id="wordy-api-pay">', '</a>', '<a href="' . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] . '"  class="wordy-api" id="wordy-api-reset">' ) . '</p></div>';
                                 }
@@ -330,7 +330,7 @@ class Wordy_For_WordPress {
                                     $wfw_revision['post_type'] = 'revision';
                                     $wfw_revision['post_status'] = 'inherit';
                                     $wfw_revision['post_title'] = $edited_post['message']['title'];
-                                    $wfw_revision['post_name'] = $post->ID . '-revision';
+                                    $wfw_revision['post_name'] = $post->ID . '-revision-v1';
                                     $wfw_revision['post_content'] = $edited_post['message']['html'];
                                     $wfw_revision['post_excerpt'] = isset( $edited_post['message']['excerpt'] ) ? $edited_post['message']['excerpt'] : '';
                                     $revision_id = wp_insert_post( $wfw_revision );
@@ -338,9 +338,14 @@ class Wordy_For_WordPress {
                                 }
 
                                 if ( strcmp( $edited_post['message']['title'], $post->post_title ) || strcmp( $edited_post['message']['html'], $post->post_content ) || (isset( $edited_post['message']['excerpt'] ) && strcmp( $edited_post['message']['excerpt'], $post->post_excerpt )) ) {
-                                    $this->show_revision_buttons = $revision_id;
+                                    $this->revision_id = $revision_id;
+
                                 }
-                                $this->wfw_notice = '<div class="updated wfw-notice"><p>' . sprintf( __( 'Wordy is awaiting your response. %1$sAccept Wordy\'s edit%2$s or %3$sreject Wordy\'s edit%2$s.', 'wordy-for-wordpress' ), '<a href="' . wp_nonce_url( 'revision.php?revision=' . $revision_id . '&action=restore', "restore-post_$post->ID|$revision_id" ) . '" class="wordy-api" id="wordy-api-confirm">', '</a>', '<a href="' . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] . '" class="wordy-api" id="wordy-api-reject">' ) . '</p></div>';
+                                $this->revision_id = $revision_id;
+                                $current_version = $revision_id - 1;
+                                $nonce_load = wp_create_nonce('restore-post_' . $revision_id);
+                                $this->nonce = $nonce_load;
+                                $this->wfw_notice = '<div class="updated wfw-notice"><div><span id="load-wordy-edit"><a href="' . admin_url("revision.php?revision=$revision_id&action=restore&_wpnonce=$this->nonce") . '" class="button-primary">' . __( 'Load Wordy edit', 'wordy-for-wordpress' ) . '</a></span><span id="diff-wordy-edit"><a href="revision.php?action=diff&from=' . $current_version . '&to=' . $revision_id . '" class="button">' . __( 'Compare to Wordy edit', 'wordy-for-wordpress' ) . '</a></span></div><p>' . sprintf( __( 'Please check your edited content using the buttons above and then click to %1$sAccept Wordy\'s edit%2$s or %3$sreject Wordy\'s edit%2$s.', 'wordy-for-wordpress' ), '<a href="' . admin_url("revision.php?revision=$$revision_id&action=restore&_wpnonce=$this->nonce") . '" class="wordy-api" id="wordy-api-confirm">', '</a>', '<a href="' . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] . '" class="wordy-api" id="wordy-api-reject">' ) . '</p></div>';
                                 break;
 
                             case 'c':
@@ -621,17 +626,6 @@ class Wordy_For_WordPress {
             }
         }
         return $actions;
-    }
-
-    function set_sample_permalink_html( $sample, $id, $new_title, $new_slug ) {
-        global $post;
-        if ( in_array( get_post_type(), array( 'post', 'page' ) ) ) {
-            if ( isset( $this->show_revision_buttons ) ) {
-                $sample .= '<span id="load-wordy-edit"><a href="' . wp_nonce_url( 'revision.php?action=restore&revision=' . $this->show_revision_buttons, "restore-post_$post->ID|$this->show_revision_buttons" ) . '" class="button-primary">' . __( 'Load Wordy edit', 'wordy-for-wordpress' ) . '</a></span>
-                        <span id="diff-wordy-edit"><a href="revision.php?action=diff&post_type=post&right=' . $post->ID . '&left=' . $this->show_revision_buttons . '" class="button">' . __( 'Compare to Wordy edit', 'wordy-for-wordpress' ) . '</a></span>' . "\n";
-            }
-        }
-        return $sample;
     }
 
     function relativize( $timestamp ) {
