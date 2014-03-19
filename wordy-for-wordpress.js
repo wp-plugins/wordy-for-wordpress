@@ -1,5 +1,7 @@
 jQuery(function ($) {
-
+    $(document).ready(function() {
+        $('.restore-revision').removeAttr('disabled');
+    });
   if ($.inArray(pagenow, [ 'page', 'post' ]) > -1) {
     getConversation();
     findRevision();
@@ -94,5 +96,5 @@ jQuery(function ($) {
     }
   }
   placeholderSupport();
-  
+
 });
