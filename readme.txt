@@ -1,11 +1,15 @@
 === Wordy for WordPress ===
 Contributors: wordycom
-Tags: copy-editing, copyediting, wordpress, copy-editors, publishing, wordy, grammar, spelling, punctuation, structure, post-publish editing, freelance editors, proofreading, proof reading, real-time, real time
+Tags: copy-editing, copyediting, wordpress, copy-editors, publishing, wordy, grammar, spelling, punctuation, structure, post-publish editing, freelance editors, proofreading, proof reading, real-time, real time, deprecated
 Requires at least: 3.8.0
 Tested up to: 3.8.1
-Stable tag: 0.1.4
+Stable tag: 0.1.5
 
 Real-time, human, copy-editing and proofreading for everything you post.
+
+== Deprecated ==
+
+The API that this plugin relies upon has been deprecated. As such, it is recommended that you uninstall this plugin for the time being. It will not function past November 30th, 2014.
 
 == Description ==
 
@@ -53,6 +57,10 @@ You can send and receive messages from your editor in real-time from your post p
 3. Wordy Conversation History
 
 == Changelog ==
+
+= 0.1.5 =
+* The API that this plugin relies upon has been deprecated. As such, it is recommended that you uninstall this plugin for the time being. It will not function past November 30th, 2014.
+
 = 0.1.4 =
 * Modifications for the "Load Wordy edit" and "Compare Wordy edit" buttons to work for version 3.8.1 of WordPress
 
